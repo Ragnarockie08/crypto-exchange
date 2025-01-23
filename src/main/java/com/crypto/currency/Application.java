@@ -1,0 +1,14 @@
+package com.crypto.currency;
+
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class Application {
+
+    public static void main(String[] args) {
+        // This kicks off the Spring Boot application
+        SpringApplication.run(Application.class, args);
+    }
+}
