@@ -1,0 +1,16 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: crypto-exchange
+
+coingecko:
+  api:
+    key: "CG-rhRaMpuzD65GJ52pqD73UKAw"
+    base-url: "https://api.coingecko.com/api/v3"
+    simple-price: "/simple/price"
+
+logging:
+  level:
+    root: INFO
