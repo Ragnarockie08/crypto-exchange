@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class StringUtils {
 
-
     public static String toCommaSeparated(List<String> items) {
         if (items == null || items.isEmpty()) {
             return "";

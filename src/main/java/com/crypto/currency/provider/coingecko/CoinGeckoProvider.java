@@ -13,7 +13,8 @@ import java.util.Map;
 public class CoinGeckoProvider implements CryptoRateProvider {
 
     private final CoinGeckoApiClient apiClient;
-    private static final String DEFAULT_RATE = "usdt";
+    private static final String DEFAULT_RATE = "usd";
+
     public CoinGeckoProvider(CoinGeckoApiClient apiClient) {
         this.apiClient = apiClient;
     }

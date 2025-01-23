@@ -2,17 +2,18 @@ package com.crypto.currency.service.impl;
 
 import com.crypto.currency.dto.CurrencyRatesResponse;
 import com.crypto.currency.exception.error.ApiException;
+import com.crypto.currency.exception.error.ProviderException;
 import com.crypto.currency.provider.CryptoRateProvider;
 import com.crypto.currency.service.CurrencyRateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.security.ProviderException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+//TODO: Create separate validator service
 @RequiredArgsConstructor
 @Service
 @Slf4j
