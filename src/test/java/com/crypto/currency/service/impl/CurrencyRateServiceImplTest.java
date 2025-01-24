@@ -4,6 +4,7 @@ import com.crypto.currency.dto.CurrencyRatesResponse;
 import com.crypto.currency.exception.error.ApiException;
 import com.crypto.currency.exception.error.ProviderException;
 import com.crypto.currency.provider.CryptoRateProvider;
+import com.crypto.currency.service.rates.impl.CurrencyRateServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

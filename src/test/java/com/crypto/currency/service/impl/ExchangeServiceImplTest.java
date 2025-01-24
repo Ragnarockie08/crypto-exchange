@@ -4,17 +4,22 @@ import com.crypto.currency.dto.CurrencyRatesResponse;
 import com.crypto.currency.dto.ExchangeRateDetails;
 import com.crypto.currency.dto.ExchangeRequest;
 import com.crypto.currency.dto.ExchangeResponse;
-import com.crypto.currency.service.CurrencyRateService;
+import com.crypto.currency.exception.error.ApiException;
+import com.crypto.currency.service.rates.CurrencyRateService;
+import com.crypto.currency.service.exchange.impl.ExchangeRateCalculator;
+import com.crypto.currency.service.exchange.impl.ExchangeServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,6 +27,8 @@ public class ExchangeServiceImplTest {
 
     @Mock
     private CurrencyRateService currencyRateService;
+    @Spy
+    private ExchangeRateCalculator exchangeRateCalculator;
 
     @InjectMocks
     private ExchangeServiceImpl exchangeService;
@@ -62,5 +69,20 @@ public class ExchangeServiceImplTest {
         assertEquals(0.00094446, btcDetails.getResult());
 
         verify(currencyRateService).getRates("usd", List.of("eur", "btc"));
+    }
+
+    @Test
+    void shouldThrowApiException_WhenBaseCurrencyIsBlank() {
+        //given
+        ExchangeRequest request = new ExchangeRequest("", List.of("eur", "btc"), 100.0);
+
+        //when
+        when(currencyRateService.getRates("", List.of("eur", "btc")))
+                .thenThrow(new ApiException("Base currency symbol must not be null or empty."));
+
+        //then
+        ApiException exception = assertThrows(ApiException.class,
+                () -> exchangeService.calculateExchange(request));
+        assertEquals("Base currency symbol must not be null or empty.", exception.getMessage());
     }
 }

@@ -19,10 +19,6 @@ public class CoinGeckoProvider implements CryptoRateProvider {
         this.apiClient = apiClient;
     }
 
-    /**
-     * Returns a map of (quote -> rate) for the given base crypto symbol.
-     * Example: baseSymbol = "BTC" => call coinGeckoId = "bitcoin", vs_currencies = "usd,eth,usdt,eur"
-     */
     @Override
     public Map<String, Double> getRatesForCurrency(String baseSymbol, List<String> rates) {
         String coinGeckoId = mapToCoinGeckoId(baseSymbol);
@@ -39,20 +35,13 @@ public class CoinGeckoProvider implements CryptoRateProvider {
         return response.get(coinGeckoId);
     }
 
-    /**
-     * Maps internal "BTC", "ETH", etc. to CoinGecko's "bitcoin", "ethereum", "tether", etc.
-     */
     private String mapToCoinGeckoId(String symbol) {
-        switch (symbol.toUpperCase()) {
-            case "BTC":
-                return "bitcoin";
-            case "ETH":
-                return "ethereum";
-            case "USDT":
-                return "tether";
-            default:
-                return symbol.toLowerCase();
-        }
+        return switch (symbol.toUpperCase()) {
+            case "BTC" -> "bitcoin";
+            case "ETH" -> "ethereum";
+            case "USDT" -> "tether";
+            default -> symbol.toLowerCase();
+        };
     }
 }
 
