@@ -33,12 +33,12 @@ public class CoinGeckoProvider implements CryptoProvider {
     }
 
     //TODO: create coinId mapping service/enum for wide param acceptance criteria
+    // (use https://docs.coingecko.com/reference/coins-list endpoint to verify available coinIds)
     private String mapToCoinGeckoId(String symbol) {
         return switch (symbol.toUpperCase()) {
             case "BTC" -> "bitcoin";
             case "ETH" -> "ethereum";
             case "USDT" -> "tether";
-            case "ADA" -> "cardano";
             default -> symbol.toLowerCase();
         };
     }

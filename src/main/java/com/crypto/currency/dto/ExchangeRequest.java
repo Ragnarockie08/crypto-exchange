@@ -7,7 +7,6 @@ import lombok.Value;
 
 import java.util.List;
 
-//TODO: validator for crypto names and ids
 @Value
 public class ExchangeRequest {
 

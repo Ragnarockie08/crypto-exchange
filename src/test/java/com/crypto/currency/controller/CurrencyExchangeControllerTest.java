@@ -7,7 +7,6 @@ import com.crypto.currency.dto.ExchangeRequest;
 import com.crypto.currency.dto.ExchangeResponse;
 import com.crypto.currency.service.rates.CurrencyRateService;
 import com.crypto.currency.service.exchange.ExchangeService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
 import java.util.Map;
 
 import static org.mockito.Mockito.when;
@@ -39,18 +37,16 @@ class CurrencyExchangeControllerTest {
     @MockitoBean
     private ExchangeService exchangeService;
 
-    private static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Test
     void shouldReturnExchangeResponse_WhenValidRequest() throws Exception {
         //given
-        ExchangeRequest request = new ExchangeRequest("btc", List.of("usd", "eth"), 1.0);
+        String requestJson = """
+                        {
+                            "from": "btc",
+                            "to": ["usd", "eth"],
+                            "amount": 1.0
+                        }
+                    """;
 
         ExchangeResponse mockResponse = new ExchangeResponse();
         mockResponse.setFrom("btc");
@@ -63,7 +59,7 @@ class CurrencyExchangeControllerTest {
 
         //then
         mockMvc.perform(post("/currencies/exchange")
-                        .content(asJsonString(request))
+                        .content(requestJson)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.from").value("btc"))
@@ -71,5 +67,59 @@ class CurrencyExchangeControllerTest {
                 .andExpect(jsonPath("$.conversions.usd.result").value(104300.0))
                 .andExpect(jsonPath("$.conversions.eth.rate").value(31.007))
                 .andExpect(jsonPath("$.conversions.eth.result").value(31.005));
+    }
+
+    @Test
+    void whenSourceCurrencyIsBlank_thenReturnsBadRequest() throws Exception {
+        String invalidRequest = """
+                            {
+                                "from": "",
+                                "to": ["usd", "eth"],
+                                "amount": 100.0
+                            }
+                        """;
+
+        mockMvc.perform(post("/currencies/exchange")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidRequest))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.field").value("from"))
+                .andExpect(jsonPath("$.message").value("Source currency (from) must not be blank"));
+    }
+
+    @Test
+    void whenTargetCurrenciesAreEmpty_thenReturnsBadRequest() throws Exception {
+        String invalidRequest = """
+                            {
+                                "from": "btc",
+                                "to": [],
+                                "amount": 100.0
+                            }
+                        """;
+
+        mockMvc.perform(post("/currencies/exchange")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidRequest))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.field").value("to"))
+                .andExpect(jsonPath("$.message").value("Target currencies (to) must not be empty"));
+    }
+
+    @Test
+    void whenAmountIsNegative_thenReturnsBadRequest() throws Exception {
+        String invalidRequest = """
+                            {
+                                "from": "btc",
+                                "to": ["usd", "eth"],
+                                "amount": -10.0
+                            }
+                        """;
+
+        mockMvc.perform(post("/currencies/exchange")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidRequest))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.field").value("amount"))
+                .andExpect(jsonPath("$.message").value("Amount must be greater than or equal to 0"));
     }
 }

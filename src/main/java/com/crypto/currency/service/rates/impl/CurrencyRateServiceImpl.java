@@ -33,7 +33,7 @@ public class CurrencyRateServiceImpl implements CurrencyRateService {
         try {
             rawRates = cryptoProvider.getRatesForCurrency(baseSymbol, rates);
         } catch (Exception e) {
-            log.error("Error fetching rates from provider for symbol={}", baseSymbol, e);
+            log.error("Error fetching rates from provider for symbol={}", baseSymbol);
             throw new ProviderException("Failed to retrieve rates for currency: " + baseSymbol, e);
         }
 
