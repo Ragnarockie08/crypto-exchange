@@ -1,7 +1,7 @@
 package com.crypto.currency.service.exchange.impl;
 
 import com.crypto.currency.dto.CurrencyRatesResponse;
-import com.crypto.currency.dto.ExchangeRateDetails;
+import com.crypto.currency.dto.ExchangeForecastDetails;
 import com.crypto.currency.dto.ExchangeRequest;
 import com.crypto.currency.dto.ExchangeResponse;
 import com.crypto.currency.service.rates.CurrencyRateService;
@@ -42,11 +42,11 @@ public class ExchangeServiceImpl implements ExchangeService {
         ExchangeResponse response = new ExchangeResponse();
         response.setFrom(request.getFrom());
 
-        Map<String, ExchangeRateDetails> detailsMap = request.getTo().stream()
+        Map<String, ExchangeForecastDetails> detailsMap = request.getTo().stream()
                 .filter(targetCurrency -> rateMap.get(targetCurrency) != null) // Skip invalid currencies
                 .collect(Collectors.toMap(
                         targetCurrency -> targetCurrency, // Key: target currency name
-                        targetCurrency -> buildExchangeRateDetails(
+                        targetCurrency -> buildExchangeForecastDetails(
                                 request.getAmount(),
                                 rateMap.get(targetCurrency)
                         )
@@ -56,13 +56,13 @@ public class ExchangeServiceImpl implements ExchangeService {
         return response;
     }
 
-    private ExchangeRateDetails buildExchangeRateDetails(double amount,
-                                                         double rate) {
+    private ExchangeForecastDetails buildExchangeForecastDetails(double amount,
+                                                             double rate) {
         double fee = exchangeRateCalculator.calculateFee(amount);
         double netAmount = exchangeRateCalculator.calculateNetAmount(amount, fee);
         double result = exchangeRateCalculator.calculateResult(netAmount, rate);
 
-        ExchangeRateDetails details = new ExchangeRateDetails();
+        ExchangeForecastDetails details = new ExchangeForecastDetails();
         details.setRate(rate);
         details.setAmount(amount);
         details.setFee(fee);

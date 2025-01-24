@@ -2,7 +2,7 @@ package com.crypto.currency.controller;
 
 
 import com.crypto.currency.config.SecurityConfig;
-import com.crypto.currency.dto.ExchangeRateDetails;
+import com.crypto.currency.dto.ExchangeForecastDetails;
 import com.crypto.currency.dto.ExchangeRequest;
 import com.crypto.currency.dto.ExchangeResponse;
 import com.crypto.currency.service.rates.CurrencyRateService;
@@ -55,8 +55,8 @@ class CurrencyExchangeControllerTest {
         ExchangeResponse mockResponse = new ExchangeResponse();
         mockResponse.setFrom("btc");
         mockResponse.setConversions(Map.of(
-                "usd", new ExchangeRateDetails(105300.0, 1.0, 104300.0, 0.01),
-                "eth", new ExchangeRateDetails(31.007, 1.0, 31.005, 0.01)
+                "usd", new ExchangeForecastDetails(105300.0, 1.0, 104300.0, 0.01),
+                "eth", new ExchangeForecastDetails(31.007, 1.0, 31.005, 0.01)
         ));
         //when
         when(exchangeService.calculateExchange(Mockito.any(ExchangeRequest.class))).thenReturn(mockResponse);

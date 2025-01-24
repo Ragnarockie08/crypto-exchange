@@ -1,7 +1,7 @@
 package com.crypto.currency.service.impl;
 
 import com.crypto.currency.dto.CurrencyRatesResponse;
-import com.crypto.currency.dto.ExchangeRateDetails;
+import com.crypto.currency.dto.ExchangeForecastDetails;
 import com.crypto.currency.dto.ExchangeRequest;
 import com.crypto.currency.dto.ExchangeResponse;
 import com.crypto.currency.exception.error.ApiException;
@@ -54,14 +54,14 @@ public class ExchangeServiceImplTest {
         assertEquals("usd", response.getFrom());
         assertEquals(2, response.getConversions().size());
 
-        ExchangeRateDetails eurDetails = response.getConversions().get("eur");
+        ExchangeForecastDetails eurDetails = response.getConversions().get("eur");
 
         assertEquals(0.84, eurDetails.getRate());
         assertEquals(100.0, eurDetails.getAmount());
         assertEquals(1.0, eurDetails.getFee());
         assertEquals(83.16, eurDetails.getResult());
 
-        ExchangeRateDetails btcDetails = response.getConversions().get("btc");
+        ExchangeForecastDetails btcDetails = response.getConversions().get("btc");
 
         assertEquals(0.00000954, btcDetails.getRate());
         assertEquals(100.0, btcDetails.getAmount());

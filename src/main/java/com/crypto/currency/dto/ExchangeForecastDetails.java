@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class ExchangeRateDetails {
+public class ExchangeForecastDetails {
     private Double rate;
     private Double amount;
     private Double result;
