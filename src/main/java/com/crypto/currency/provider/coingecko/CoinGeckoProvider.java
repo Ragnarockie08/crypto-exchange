@@ -1,6 +1,5 @@
 package com.crypto.currency.provider.coingecko;
 
-
 import com.crypto.currency.provider.CryptoProvider;
 import com.crypto.currency.provider.coingecko.client.CoinGeckoApiClient;
 import lombok.RequiredArgsConstructor;

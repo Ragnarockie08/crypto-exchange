@@ -1,7 +1,6 @@
 package com.crypto.currency.dto;
 
 import lombok.Data;
-
 import java.util.Map;
 
 @Data
