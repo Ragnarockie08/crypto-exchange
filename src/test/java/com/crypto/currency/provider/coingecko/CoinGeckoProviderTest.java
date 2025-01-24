@@ -1,7 +1,6 @@
 package com.crypto.currency.provider.coingecko;
 
 import com.crypto.currency.provider.coingecko.client.CoinGeckoApiClient;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

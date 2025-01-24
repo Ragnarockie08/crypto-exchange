@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 // Strategy Interface
-public interface CryptoRateProvider {
+public interface CryptoProvider {
     /**
      * Returns a map of (quoteSymbol -> exchangeRate) for the given baseSymbol.
      */

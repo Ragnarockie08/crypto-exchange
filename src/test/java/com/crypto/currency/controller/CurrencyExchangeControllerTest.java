@@ -49,7 +49,7 @@ class CurrencyExchangeControllerTest {
 
     @Test
     void shouldReturnExchangeResponse_WhenValidRequest() throws Exception {
-        // Given
+        //given
         ExchangeRequest request = new ExchangeRequest("btc", List.of("usd", "eth"), 1.0);
 
         ExchangeResponse mockResponse = new ExchangeResponse();
@@ -58,10 +58,10 @@ class CurrencyExchangeControllerTest {
                 "usd", new ExchangeRateDetails(105300.0, 1.0, 104300.0, 0.01),
                 "eth", new ExchangeRateDetails(31.007, 1.0, 31.005, 0.01)
         ));
-
+        //when
         when(exchangeService.calculateExchange(Mockito.any(ExchangeRequest.class))).thenReturn(mockResponse);
 
-        // When & Then
+        //then
         mockMvc.perform(post("/currencies/exchange")
                         .content(asJsonString(request))
                         .contentType(MediaType.APPLICATION_JSON))

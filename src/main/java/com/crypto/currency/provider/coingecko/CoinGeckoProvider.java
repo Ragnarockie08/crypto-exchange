@@ -1,7 +1,7 @@
 package com.crypto.currency.provider.coingecko;
 
 
-import com.crypto.currency.provider.CryptoRateProvider;
+import com.crypto.currency.provider.CryptoProvider;
 import com.crypto.currency.provider.coingecko.client.CoinGeckoApiClient;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class CoinGeckoProvider implements CryptoRateProvider {
+public class CoinGeckoProvider implements CryptoProvider {
 
     private final CoinGeckoApiClient apiClient;
     private static final String DEFAULT_RATE = "usd";

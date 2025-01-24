@@ -3,7 +3,7 @@ package com.crypto.currency.service.rates.impl;
 import com.crypto.currency.dto.CurrencyRatesResponse;
 import com.crypto.currency.exception.error.ApiException;
 import com.crypto.currency.exception.error.ProviderException;
-import com.crypto.currency.provider.CryptoRateProvider;
+import com.crypto.currency.provider.CryptoProvider;
 import com.crypto.currency.service.rates.CurrencyRateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,26 +19,27 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CurrencyRateServiceImpl implements CurrencyRateService {
 
-    private final CryptoRateProvider cryptoRateProvider;
+    private final CryptoProvider cryptoProvider;
 
     @Override
     public CurrencyRatesResponse getRates(String baseSymbol, List<String> rates) {
 
         if (baseSymbol == null || baseSymbol.isBlank()) {
+            log.error("Error base currency symbol must not be null or empty. {}", baseSymbol);
             throw new ApiException("Base currency symbol must not be null or empty.");
         }
 
-        log.info("Fetching rates for baseSymbol={} with filters={}", baseSymbol, rates);
+        log.debug("Fetching rates for baseSymbol={} with filters={}", baseSymbol, rates);
         Map<String, Double> rawRates;
         try {
-            rawRates = cryptoRateProvider.getRatesForCurrency(baseSymbol, rates);
+            rawRates = cryptoProvider.getRatesForCurrency(baseSymbol, rates);
         } catch (Exception e) {
             log.error("Error fetching rates from provider for symbol={}", baseSymbol, e);
             throw new ProviderException("Failed to retrieve rates for currency: " + baseSymbol, e);
         }
 
         if (rawRates == null || rawRates.isEmpty()) {
-            log.warn("No rates found for baseSymbol={}", baseSymbol);
+            log.error("No rates found for baseSymbol={}", baseSymbol);
             throw new ProviderException("No rates found for currency: " + baseSymbol);
         }
 

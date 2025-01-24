@@ -3,7 +3,7 @@ package com.crypto.currency.service.impl;
 import com.crypto.currency.dto.CurrencyRatesResponse;
 import com.crypto.currency.exception.error.ApiException;
 import com.crypto.currency.exception.error.ProviderException;
-import com.crypto.currency.provider.CryptoRateProvider;
+import com.crypto.currency.provider.CryptoProvider;
 import com.crypto.currency.service.rates.impl.CurrencyRateServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 class CurrencyRateServiceImplTest {
 
     @Mock
-    private CryptoRateProvider cryptoRateProvider;
+    private CryptoProvider cryptoProvider;
     @InjectMocks
     private CurrencyRateServiceImpl currencyRateService;
 
@@ -32,7 +32,7 @@ class CurrencyRateServiceImplTest {
         List<String> rates = List.of("usd", "eth");
         Map<String, Double> mockedResult = Map.of("usd", 100.0, "eth", 30.0);
         //when
-        when(cryptoRateProvider.getRatesForCurrency(coinId, rates)).thenReturn(mockedResult);
+        when(cryptoProvider.getRatesForCurrency(coinId, rates)).thenReturn(mockedResult);
 
         //then
         CurrencyRatesResponse currencyRatesResponse =  currencyRateService.getRates(coinId, rates);
@@ -50,7 +50,7 @@ class CurrencyRateServiceImplTest {
         List<String> rates = List.of("usd", "eth");
         Map<String, Double> mockedResult = Map.of("usd", 100.0, "eth", 30.0);
         //when
-        when(cryptoRateProvider.getRatesForCurrency(coinId, rates)).thenThrow(new RuntimeException());
+        when(cryptoProvider.getRatesForCurrency(coinId, rates)).thenThrow(new RuntimeException());
 
         //then
         ProviderException providerException = assertThrows(
@@ -69,7 +69,7 @@ class CurrencyRateServiceImplTest {
         Map<String, Double> providerRates = Map.of("btc", 123.45, "ada", 2.34);
 
         //when
-        when(cryptoRateProvider.getRatesForCurrency(baseSymbol, requestedRates))
+        when(cryptoProvider.getRatesForCurrency(baseSymbol, requestedRates))
                 .thenReturn(providerRates);
 
         //then
@@ -89,7 +89,7 @@ class CurrencyRateServiceImplTest {
         Map<String, Double> providerRates = Map.of("usd", 100.0, "eth", 200.0, "btc", 300.0);
 
         //when
-        when(cryptoRateProvider.getRatesForCurrency(baseSymbol, requestedRates))
+        when(cryptoProvider.getRatesForCurrency(baseSymbol, requestedRates))
                 .thenReturn(providerRates);
 
         //then
