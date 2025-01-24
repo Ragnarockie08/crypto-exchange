@@ -6,7 +6,6 @@ import com.crypto.currency.dto.ExchangeResponse;
 import com.crypto.currency.service.rates.CurrencyRateService;
 import com.crypto.currency.service.exchange.ExchangeService;
 import jakarta.validation.Valid;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
