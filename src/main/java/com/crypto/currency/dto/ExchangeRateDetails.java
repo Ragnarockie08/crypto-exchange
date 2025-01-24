@@ -1,8 +1,13 @@
 package com.crypto.currency.dto;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class ExchangeRateDetails {
     private Double rate;
     private Double amount;

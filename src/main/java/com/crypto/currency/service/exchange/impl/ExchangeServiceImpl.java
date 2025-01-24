@@ -1,11 +1,11 @@
-package com.crypto.currency.service.impl;
+package com.crypto.currency.service.exchange.impl;
 
 import com.crypto.currency.dto.CurrencyRatesResponse;
 import com.crypto.currency.dto.ExchangeRateDetails;
 import com.crypto.currency.dto.ExchangeRequest;
 import com.crypto.currency.dto.ExchangeResponse;
-import com.crypto.currency.service.CurrencyRateService;
-import com.crypto.currency.service.ExchangeService;
+import com.crypto.currency.service.rates.CurrencyRateService;
+import com.crypto.currency.service.exchange.ExchangeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ExchangeServiceImpl implements ExchangeService {
 
-    public static final double FEE_VALUE = 0.01;
     private final CurrencyRateService currencyRateService;
+    private final ExchangeRateCalculator exchangeRateCalculator;
 
     @Override
-    public ExchangeResponse calculateExchange(ExchangeRequest request) {
+    public ExchangeResponse calculateExchange(final ExchangeRequest request) {
         log.debug("Starting exchange calculation for source currency: {}, target currencies: {}, amount: {}",
                 request.getFrom(), request.getTo(), request.getAmount());
 
@@ -36,7 +36,7 @@ public class ExchangeServiceImpl implements ExchangeService {
         return response;
     }
 
-    private ExchangeResponse populateExchangeDetails(ExchangeRequest request,
+    private ExchangeResponse populateExchangeDetails(final ExchangeRequest request,
                                          Map<String, Double> rateMap) {
 
         ExchangeResponse response = new ExchangeResponse();
@@ -58,29 +58,17 @@ public class ExchangeServiceImpl implements ExchangeService {
 
     private ExchangeRateDetails buildExchangeRateDetails(double amount,
                                                          double rate) {
-        double feeInSource = calculateFee(amount);
-        double netAmountInSource = getNetAmountInSource(amount, feeInSource);
-        double resultInTarget = getResultInTarget(rate, netAmountInSource);
+        double fee = exchangeRateCalculator.calculateFee(amount);
+        double netAmount = exchangeRateCalculator.calculateNetAmount(amount, fee);
+        double result = exchangeRateCalculator.calculateResult(netAmount, rate);
 
         ExchangeRateDetails details = new ExchangeRateDetails();
         details.setRate(rate);
         details.setAmount(amount);
-        details.setFee(feeInSource);
-        details.setResult(resultInTarget);
+        details.setFee(fee);
+        details.setResult(result);
 
         return details;
-    }
-
-    private double getNetAmountInSource(double amount, double feeInSource) {
-        return amount - feeInSource;
-    }
-
-    private double getResultInTarget(double rate, double netAmountInSource) {
-        return netAmountInSource * rate;
-    }
-
-    private double calculateFee(double amount) {
-        return getResultInTarget(FEE_VALUE, amount);
     }
 }
 

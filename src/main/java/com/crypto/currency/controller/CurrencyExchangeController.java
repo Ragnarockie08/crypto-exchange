@@ -3,8 +3,10 @@ package com.crypto.currency.controller;
 import com.crypto.currency.dto.CurrencyRatesResponse;
 import com.crypto.currency.dto.ExchangeRequest;
 import com.crypto.currency.dto.ExchangeResponse;
-import com.crypto.currency.service.CurrencyRateService;
-import com.crypto.currency.service.ExchangeService;
+import com.crypto.currency.service.rates.CurrencyRateService;
+import com.crypto.currency.service.exchange.ExchangeService;
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +26,7 @@ public class CurrencyExchangeController {
 
     /**
      * GET /currencies/{currency}?filter[]=X&filter[]=Y
-     * Example: /currencies/BTC?filter[]=USDT&filter[]=ETH
+     * Example: /currencies/bitcoin?filter[]=usd&filter[]=eth
      */
     @GetMapping("/{currency}")
     public CurrencyRatesResponse getCurrencyRates(
@@ -36,10 +38,10 @@ public class CurrencyExchangeController {
 
     /**
      * POST /currencies/exchange
-     * Body example: {"from":"currencyA","to":["currencyB","currencyC"],"amount":121}
+     * Body example: {"from":"btc","to":["usd","eth"],"amount":121}
      */
     @PostMapping("/exchange")
-    public ExchangeResponse exchange(@RequestBody ExchangeRequest request) {
+    public ExchangeResponse exchange(@Valid @RequestBody ExchangeRequest request) {
         return exchangeService.calculateExchange(request);
     }
 }

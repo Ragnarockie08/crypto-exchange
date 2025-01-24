@@ -1,4 +1,4 @@
-package com.crypto.currency.service;
+package com.crypto.currency.service.exchange;
 
 import com.crypto.currency.dto.ExchangeRequest;
 import com.crypto.currency.dto.ExchangeResponse;

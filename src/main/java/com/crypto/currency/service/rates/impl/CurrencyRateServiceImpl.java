@@ -1,10 +1,10 @@
-package com.crypto.currency.service.impl;
+package com.crypto.currency.service.rates.impl;
 
 import com.crypto.currency.dto.CurrencyRatesResponse;
 import com.crypto.currency.exception.error.ApiException;
 import com.crypto.currency.exception.error.ProviderException;
 import com.crypto.currency.provider.CryptoRateProvider;
-import com.crypto.currency.service.CurrencyRateService;
+import com.crypto.currency.service.rates.CurrencyRateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
