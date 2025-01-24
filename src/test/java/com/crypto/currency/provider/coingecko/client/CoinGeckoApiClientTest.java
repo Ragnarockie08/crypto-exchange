@@ -2,10 +2,12 @@ package com.crypto.currency.provider.coingecko.client;
 
 import com.crypto.currency.TestConfig;
 import com.crypto.currency.exception.error.ProviderException;
+import com.crypto.currency.provider.coingecko.properties.CoinGeckoProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 @RestClientTest(CoinGeckoApiClient.class)
+@EnableConfigurationProperties(CoinGeckoProperties.class)
 @Import(TestConfig.class)
 class CoinGeckoApiClientTest {
 
@@ -31,6 +34,8 @@ class CoinGeckoApiClientTest {
     private RestTemplate restTemplate;
     @Autowired
     private MockRestServiceServer mockServer;
+    @Autowired
+    private CoinGeckoProperties coinGeckoProperties;
     @Autowired
     private CoinGeckoApiClient coinGeckoApiClient;
     @Autowired

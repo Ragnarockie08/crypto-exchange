@@ -6,7 +6,7 @@ import com.crypto.currency.dto.ExchangeRequest;
 import com.crypto.currency.dto.ExchangeResponse;
 import com.crypto.currency.exception.error.ApiException;
 import com.crypto.currency.service.rates.CurrencyRateService;
-import com.crypto.currency.service.exchange.impl.ExchangeRateCalculator;
+import com.crypto.currency.service.exchange.impl.ExchangeCalculator;
 import com.crypto.currency.service.exchange.impl.ExchangeServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +28,7 @@ public class ExchangeServiceImplTest {
     @Mock
     private CurrencyRateService currencyRateService;
     @Spy
-    private ExchangeRateCalculator exchangeRateCalculator;
+    private ExchangeCalculator exchangeCalculator;
 
     @InjectMocks
     private ExchangeServiceImpl exchangeService;

@@ -48,7 +48,7 @@ class CurrencyRateServiceImplTest {
         //given
         String coinId = "bitcoin";
         List<String> rates = List.of("usd", "eth");
-        Map<String, Double> mockedResult = Map.of("usd", 100.0, "eth", 30.0);
+
         //when
         when(cryptoProvider.getRatesForCurrency(coinId, rates)).thenThrow(new RuntimeException());
 
@@ -59,45 +59,5 @@ class CurrencyRateServiceImplTest {
         );
 
         assertEquals("Failed to retrieve rates for currency: bitcoin", providerException.getMessage());
-    }
-
-    @Test
-    void shouldThrowApiException_whenFiltersRemoveAllRates() {
-        //given
-        String baseSymbol = "bitcoin";
-        List<String> requestedRates = List.of("usd", "eth");
-        Map<String, Double> providerRates = Map.of("btc", 123.45, "ada", 2.34);
-
-        //when
-        when(cryptoProvider.getRatesForCurrency(baseSymbol, requestedRates))
-                .thenReturn(providerRates);
-
-        //then
-        ApiException exception = assertThrows(
-                ApiException.class,
-                () -> currencyRateService.getRates(baseSymbol, requestedRates)
-        );
-
-        assertEquals("No matching filtered rates found for currency: " + baseSymbol, exception.getMessage());
-    }
-
-    @Test
-    void shouldReturnPartiallyFilteredRates_whenSomeRatesMatch() {
-        //given
-        String baseSymbol = "bitcoin";
-        List<String> requestedRates = List.of("usd", "eth", "unknown");
-        Map<String, Double> providerRates = Map.of("usd", 100.0, "eth", 200.0, "btc", 300.0);
-
-        //when
-        when(cryptoProvider.getRatesForCurrency(baseSymbol, requestedRates))
-                .thenReturn(providerRates);
-
-        //then
-        CurrencyRatesResponse response = currencyRateService.getRates(baseSymbol, requestedRates);
-
-        assertEquals(baseSymbol, response.getSource());
-        assertEquals(2, response.getRates().size());
-        assertEquals(100.0, response.getRates().get("usd"));
-        assertEquals(200.0, response.getRates().get("eth"));
     }
 }

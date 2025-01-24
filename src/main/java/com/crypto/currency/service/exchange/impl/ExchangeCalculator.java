@@ -3,7 +3,7 @@ package com.crypto.currency.service.exchange.impl;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ExchangeRateCalculator {
+public class ExchangeCalculator {
 
     private static final double FEE_PERCENTAGE = 0.01;
 

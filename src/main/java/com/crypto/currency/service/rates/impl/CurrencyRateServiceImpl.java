@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 //TODO: Create separate validator service
 @RequiredArgsConstructor
@@ -41,21 +40,6 @@ public class CurrencyRateServiceImpl implements CurrencyRateService {
         if (rawRates == null || rawRates.isEmpty()) {
             log.error("No rates found for baseSymbol={}", baseSymbol);
             throw new ProviderException("No rates found for currency: " + baseSymbol);
-        }
-
-        if (rates != null && !rates.isEmpty()) {
-            List<String> lowerFilters = rates.stream()
-                    .map(String::toLowerCase)
-                    .collect(Collectors.toList());
-
-            rawRates = rawRates.entrySet().stream()
-                    .filter(entry -> lowerFilters.contains(entry.getKey().toLowerCase()))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-            if (rawRates.isEmpty()) {
-                log.warn("Filters={} removed all rates for baseSymbol={}", rates, baseSymbol);
-                throw new ApiException("No matching filtered rates found for currency: " + baseSymbol);
-            }
         }
 
         CurrencyRatesResponse response = new CurrencyRatesResponse();
