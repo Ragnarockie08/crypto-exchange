@@ -30,8 +30,7 @@ public class CurrencyExchangeController {
     @GetMapping("/{currency}")
     public CurrencyRatesResponse getCurrencyRates(
             @PathVariable("currency") String currency,
-            @RequestParam(value = "filter[]", required = false) List<String> filters
-    ) {
+            @RequestParam(value = "filter[]", required = false) List<String> filters) {
         return currencyRateService.getRates(currency, filters);
     }
 

@@ -5,9 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Value;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-//TODO: validator for crypto names and ids
 @Value
 public class ExchangeRequest {
 
@@ -15,7 +15,7 @@ public class ExchangeRequest {
     String from;
     @NotEmpty(message = "Target currencies (to) must not be empty")
     List<String> to;
-    @Min(value = 0, message = "Amount must be greater than or equal to 0")
-    Double amount;
+    @Min(value = 1, message = "Amount must be greater than or equal to 0")
+    BigDecimal amount;
 }
 

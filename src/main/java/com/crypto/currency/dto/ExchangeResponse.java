@@ -8,6 +8,6 @@ import java.util.Map;
 public class ExchangeResponse {
 
     private String from;
-    private Map<String, ExchangeRateDetails> conversions;
+    private Map<String, ExchangeForecastDetails> conversions;
 }
 

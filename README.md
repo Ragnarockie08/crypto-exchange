@@ -30,7 +30,7 @@ This application provides two main endpoints for retrieving cryptocurrency excha
 ## Prerequisites
 
 1. **Java**: Make sure you have at least Java 11 (or whatever version your project requires).
-2. **Maven**: Installed and configured properly if you want to build/run via Maven.
+2. **Maven**: Installed and configured properly if you want to build/run via Maven.(May need to add framework support after repo clone)
 3. **Lombok**: Ensure your IDE supports Lombok annotation processing if you’re reading the code.
 
 ---
@@ -41,7 +41,6 @@ This application provides two main endpoints for retrieving cryptocurrency excha
    ```bash
    git clone https://github.com/your-repo/crypto-exchange.git
    cd crypto-exchange
-
 
 2. **Build the Project (Maven example)**:
    ```bash
@@ -152,7 +151,7 @@ Performs a currency exchange from one coin to multiple target coins, applying a 
 #### Base Coin vs. Coin IDs
 
 - {base} in the path is a long name like "bitcoin" or "ethereum".
-Filters and the to array use short IDs like btc, eth, usd, pln, etc.
+- Filters, from and the toArray use short IDs (lower and uppercased) like btc, eth, usd, pln, etc.
 
 #### CoinGecko Integration
 The app queries CoinGecko’s /simple/price or related endpoints.
