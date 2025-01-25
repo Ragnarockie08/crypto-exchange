@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,18 +54,21 @@ class CoinGeckoApiClientTest {
         String coinId = "bitcoin";
         List<String> rates = List.of("usd", "eth");
 
-        Map<String, Map<String, Double>> mockResponse = new HashMap<>();
-        mockResponse.put(coinId, Map.of("usd", 27000.0, "eth", 15.2));
+        Map<String, Map<String, BigDecimal>> mockResponse = new HashMap<>();
+        mockResponse.put(coinId, Map.of(
+                "usd", new BigDecimal("27000.0"),
+                "eth", new BigDecimal("15.2")
+        ));
         //when
         mockServer.expect(
-                requestTo("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd,eth"))
+                        requestTo("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd,eth"))
                 .andRespond(withSuccess(objectMapper.writeValueAsString(mockResponse), MediaType.APPLICATION_JSON));
 
         //then
-        Map<String, Map<String, Double>> result = coinGeckoApiClient.getSimplePrice(coinId, rates);
+        Map<String, Map<String, BigDecimal>> result = coinGeckoApiClient.getSimplePrice(coinId, rates);
 
-        assertEquals(27000.0, result.get("bitcoin").get("usd"));
-        assertEquals(15.2, result.get("bitcoin").get("eth"));
+        assertEquals(new BigDecimal("27000.0"), result.get("bitcoin").get("usd"));
+        assertEquals(new BigDecimal("15.2"), result.get("bitcoin").get("eth"));
     }
 
     @Test
@@ -83,6 +87,6 @@ class CoinGeckoApiClientTest {
                 () -> coinGeckoApiClient.getSimplePrice(coinId, rates)
         );
 
-        assertEquals( "Failed to fetch data from CoinGecko", exception.getMessage());
+        assertEquals("Failed to fetch data from CoinGecko", exception.getMessage());
     }
 }

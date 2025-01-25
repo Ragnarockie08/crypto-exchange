@@ -2,20 +2,22 @@ package com.crypto.currency.service.exchange.impl;
 
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 public class ExchangeCalculator {
 
-    private static final double FEE_PERCENTAGE = 0.01;
+    private static final BigDecimal FEE_PERCENTAGE = BigDecimal.valueOf(0.01);
 
-    public double calculateFee(double amount) {
-        return amount * FEE_PERCENTAGE;
+    public BigDecimal calculateFee(BigDecimal amount) {
+        return amount.multiply(FEE_PERCENTAGE).stripTrailingZeros();
     }
 
-    public double calculateNetAmount(double amount, double fee) {
-        return amount - fee;
+    public BigDecimal calculateNetAmount(BigDecimal amount, BigDecimal fee) {
+        return amount.subtract(fee).stripTrailingZeros();
     }
 
-    public double calculateResult(double netAmount, double rate) {
-        return netAmount * rate;
+    public BigDecimal calculateResult(BigDecimal netAmount, BigDecimal rate) {
+        return netAmount.multiply(rate);
     }
 }

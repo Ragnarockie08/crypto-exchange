@@ -1,12 +1,11 @@
 package com.crypto.currency.controller;
 
-
 import com.crypto.currency.config.SecurityConfig;
 import com.crypto.currency.dto.ExchangeForecastDetails;
 import com.crypto.currency.dto.ExchangeRequest;
 import com.crypto.currency.dto.ExchangeResponse;
-import com.crypto.currency.service.rates.CurrencyRateService;
 import com.crypto.currency.service.exchange.ExchangeService;
+import com.crypto.currency.service.rates.CurrencyRateService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +15,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-//TODO: setup BaseWebMvc controller for all future controllers
 @Import(SecurityConfig.class)
 @WebMvcTest(CurrencyExchangeController.class)
 class CurrencyExchangeControllerTest {
@@ -51,8 +50,16 @@ class CurrencyExchangeControllerTest {
         ExchangeResponse mockResponse = new ExchangeResponse();
         mockResponse.setFrom("btc");
         mockResponse.setConversions(Map.of(
-                "usd", new ExchangeForecastDetails(105300.0, 1.0, 104300.0, 0.01),
-                "eth", new ExchangeForecastDetails(31.007, 1.0, 31.005, 0.01)
+                "usd", new ExchangeForecastDetails(
+                        new BigDecimal("105300.0"),
+                        new BigDecimal("1.0"),
+                        new BigDecimal("104300.0"),
+                        new BigDecimal("0.01")),
+                "eth", new ExchangeForecastDetails(
+                        new BigDecimal("31.007"),
+                        new BigDecimal("1.0"),
+                        new BigDecimal("31.005"),
+                        new BigDecimal("0.01"))
         ));
         //when
         when(exchangeService.calculateExchange(Mockito.any(ExchangeRequest.class))).thenReturn(mockResponse);

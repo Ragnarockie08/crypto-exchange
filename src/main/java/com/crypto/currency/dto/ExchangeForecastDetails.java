@@ -2,11 +2,13 @@ package com.crypto.currency.dto;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Value
 public class ExchangeForecastDetails {
-    Double rate;
-    Double amount;
-    Double result;
-    Double fee;
+    BigDecimal rate;
+    BigDecimal amount;
+    BigDecimal result;
+    BigDecimal fee;
 }
 

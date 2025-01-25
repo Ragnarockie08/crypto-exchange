@@ -11,6 +11,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public class CoinGeckoApiClient {
     private final RestTemplate restTemplate;
     private final CoinGeckoProperties coinGeckoProperties;
 
-    public Map<String, Map<String, Double>> getSimplePrice(String coinId, List<String> vsCurrencies) {
+    public Map<String, Map<String, BigDecimal>> getSimplePrice(String coinId, List<String> vsCurrencies) {
 
         String url = buildSimplePriceUri(coinGeckoProperties.getBaseUrl(), coinId, vsCurrencies);
 
@@ -30,12 +31,12 @@ public class CoinGeckoApiClient {
         HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 
         try {
-            ResponseEntity<Map<String, Map<String, Double>>> response =
+            ResponseEntity<Map<String, Map<String, BigDecimal>>> response =
                     restTemplate.exchange(
                             url,
                             HttpMethod.GET,
                             requestEntity,
-                            new ParameterizedTypeReference<Map<String, Map<String, Double>>>() {}
+                            new ParameterizedTypeReference<Map<String, Map<String, BigDecimal>>>() {}
                     );
 
             if (response.getStatusCode() != HttpStatus.OK) {
@@ -44,8 +45,7 @@ public class CoinGeckoApiClient {
             return response.getBody();
         } catch (RestClientException ex) {
             throw new ProviderException(
-                    "Failed to fetch data from CoinGecko",
-                    ex
+                    "Failed to fetch data from CoinGecko"
             );
         }
     }

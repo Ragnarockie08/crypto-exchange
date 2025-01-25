@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -29,18 +30,21 @@ public class ExchangeServiceImplTest {
     private CurrencyRateService currencyRateService;
     @Spy
     private ExchangeCalculator exchangeCalculator;
-
     @InjectMocks
     private ExchangeServiceImpl exchangeService;
 
     @Test
     void shouldCalculateExchangeForecast_WhenValidData() {
         //given
-        ExchangeRequest request = new ExchangeRequest("usd", List.of("eur", "btc"), 100.0);
+        ExchangeRequest request = new ExchangeRequest(
+                "usd",
+                List.of("eur", "btc"),
+                new BigDecimal("100.0")
+        );
 
-        Map<String, Double> mockRates = Map.of(
-                "eur", 0.84,
-                "btc", 0.00000954
+        Map<String, BigDecimal> mockRates = Map.of(
+                "eur", new BigDecimal("0.84"),
+                "btc", new BigDecimal("0.00000954")
         );
         CurrencyRatesResponse ratesResponse = new CurrencyRatesResponse();
         ratesResponse.setRates(mockRates);
@@ -55,18 +59,16 @@ public class ExchangeServiceImplTest {
         assertEquals(2, response.getConversions().size());
 
         ExchangeForecastDetails eurDetails = response.getConversions().get("eur");
-
-        assertEquals(0.84, eurDetails.getRate());
-        assertEquals(100.0, eurDetails.getAmount());
-        assertEquals(1.0, eurDetails.getFee());
-        assertEquals(83.16, eurDetails.getResult());
+        assertEquals(0, eurDetails.getRate().compareTo(new BigDecimal("0.84")));
+        assertEquals(0, eurDetails.getAmount().compareTo(new BigDecimal("100.0")));
+        assertEquals(0, eurDetails.getFee().compareTo(new BigDecimal("1.000")));
+        assertEquals(0, eurDetails.getResult().compareTo(new BigDecimal("83.16000")));
 
         ExchangeForecastDetails btcDetails = response.getConversions().get("btc");
-
-        assertEquals(0.00000954, btcDetails.getRate());
-        assertEquals(100.0, btcDetails.getAmount());
-        assertEquals(1.0, btcDetails.getFee());
-        assertEquals(0.00094446, btcDetails.getResult());
+        assertEquals(0, btcDetails.getRate().compareTo(new BigDecimal("0.00000954")));
+        assertEquals(0, btcDetails.getAmount().compareTo(new BigDecimal("100.0")));
+        assertEquals(0, btcDetails.getFee().compareTo(new BigDecimal("1.000")));
+        assertEquals(0, btcDetails.getResult().compareTo(new BigDecimal("0.00094446")));
 
         verify(currencyRateService).getRates("usd", List.of("eur", "btc"));
     }
@@ -74,7 +76,7 @@ public class ExchangeServiceImplTest {
     @Test
     void shouldThrowApiException_WhenBaseCurrencyIsBlank() {
         //given
-        ExchangeRequest request = new ExchangeRequest("", List.of("eur", "btc"), 100.0);
+        ExchangeRequest request = new ExchangeRequest("", List.of("eur", "btc"), new BigDecimal("1.0"));
 
         //when
         when(currencyRateService.getRates("", List.of("eur", "btc")))
@@ -86,3 +88,4 @@ public class ExchangeServiceImplTest {
         assertEquals("Base currency symbol must not be null or empty.", exception.getMessage());
     }
 }
+

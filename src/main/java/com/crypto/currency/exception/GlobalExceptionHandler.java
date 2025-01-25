@@ -26,7 +26,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleProviderException(ProviderException ex) {
         Map<String, String> errorBody = new HashMap<>();
         errorBody.put("message", ex.getMessage());
-        errorBody.put("originalMessage", ex.getDetailedMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorBody);
     }
 

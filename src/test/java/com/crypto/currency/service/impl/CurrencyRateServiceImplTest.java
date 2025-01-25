@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,7 @@ class CurrencyRateServiceImplTest {
         //given
         String coinId = "bitcoin";
         List<String> rates = List.of("usd", "eth");
-        Map<String, Double> mockedResult = Map.of("usd", 100.0, "eth", 30.0);
+        Map<String, BigDecimal> mockedResult = Map.of("usd", new BigDecimal("100.0"), "eth", new BigDecimal("30.0"));
         //when
         when(cryptoProvider.getRatesForCurrency(coinId, rates)).thenReturn(mockedResult);
 
@@ -39,8 +40,8 @@ class CurrencyRateServiceImplTest {
 
         assertEquals("bitcoin", currencyRatesResponse.getSource());
         assertEquals(2, currencyRatesResponse.getRates().size());
-        assertEquals(100.0, currencyRatesResponse.getRates().get("usd"));
-        assertEquals(30.0, currencyRatesResponse.getRates().get("eth"));
+        assertEquals(new BigDecimal("100.0"), currencyRatesResponse.getRates().get("usd"));
+        assertEquals(new BigDecimal("30.0"), currencyRatesResponse.getRates().get("eth"));
     }
 
     @Test
@@ -50,7 +51,7 @@ class CurrencyRateServiceImplTest {
         List<String> rates = List.of("usd", "eth");
 
         //when
-        when(cryptoProvider.getRatesForCurrency(coinId, rates)).thenThrow(new RuntimeException());
+        when(cryptoProvider.getRatesForCurrency(coinId, rates)).thenThrow(new ProviderException("Failed to retrieve rates for currency: bitcoin"));
 
         //then
         ProviderException providerException = assertThrows(

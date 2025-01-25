@@ -4,12 +4,14 @@ import com.crypto.currency.dto.CurrencyRatesResponse;
 import com.crypto.currency.dto.ExchangeForecastDetails;
 import com.crypto.currency.dto.ExchangeRequest;
 import com.crypto.currency.dto.ExchangeResponse;
+import com.crypto.currency.exception.error.ApiException;
 import com.crypto.currency.service.rates.CurrencyRateService;
 import com.crypto.currency.service.exchange.ExchangeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -21,14 +23,16 @@ public class ExchangeServiceImpl implements ExchangeService {
     private final CurrencyRateService currencyRateService;
     private final ExchangeCalculator exchangeCalculator;
 
+    //TODO: validator for exchange amount should vary from currencyId
+    // fiat > spot should have min amount 10 etc.
+    // spot > fiat should enable granular amounts for exchange (0.005) etc.
     @Override
     public ExchangeResponse calculateExchange(final ExchangeRequest request) {
         log.debug("Starting exchange calculation for source currency: {}, target currencies: {}, amount: {}",
                 request.getFrom(), request.getTo(), request.getAmount());
 
         CurrencyRatesResponse ratesResponse = currencyRateService.getRates(request.getFrom(), request.getTo());
-
-        Map<String, Double> rateMap = ratesResponse.getRates();
+        Map<String, BigDecimal> rateMap = ratesResponse.getRates();
 
         ExchangeResponse response = populateExchangeResponse(request, rateMap);
         log.debug("Completed exchange calculation for source currency: {}, response: {}", request.getFrom(), response);
@@ -37,7 +41,7 @@ public class ExchangeServiceImpl implements ExchangeService {
     }
 
     private ExchangeResponse populateExchangeResponse(final ExchangeRequest request,
-                                                      Map<String, Double> rateMap) {
+                                                      Map<String, BigDecimal> rateMap) {
 
         ExchangeResponse response = new ExchangeResponse();
         response.setFrom(request.getFrom());
@@ -58,11 +62,11 @@ public class ExchangeServiceImpl implements ExchangeService {
         return response;
     }
 
-    private ExchangeForecastDetails calculateExchangeForecast(double amount,
-                                                              double rate) {
-        double fee = exchangeCalculator.calculateFee(amount);
-        double netAmount = exchangeCalculator.calculateNetAmount(amount, fee);
-        double result = exchangeCalculator.calculateResult(netAmount, rate);
+    private ExchangeForecastDetails calculateExchangeForecast(BigDecimal amount,
+                                                              BigDecimal rate) {
+        BigDecimal fee = exchangeCalculator.calculateFee(amount);
+        BigDecimal netAmount = exchangeCalculator.calculateNetAmount(amount, fee);
+        BigDecimal result = exchangeCalculator.calculateResult(netAmount, rate);
 
         return new ExchangeForecastDetails(rate, amount, result, fee);
     }

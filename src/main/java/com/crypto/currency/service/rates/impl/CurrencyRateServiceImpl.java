@@ -2,13 +2,13 @@ package com.crypto.currency.service.rates.impl;
 
 import com.crypto.currency.dto.CurrencyRatesResponse;
 import com.crypto.currency.exception.error.ApiException;
-import com.crypto.currency.exception.error.ProviderException;
 import com.crypto.currency.provider.CryptoProvider;
 import com.crypto.currency.service.rates.CurrencyRateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -29,17 +29,11 @@ public class CurrencyRateServiceImpl implements CurrencyRateService {
         }
 
         log.debug("Fetching rates for baseSymbol={} with filters={}", baseSymbol, rates);
-        Map<String, Double> rawRates;
-        try {
-            rawRates = cryptoProvider.getRatesForCurrency(baseSymbol, rates);
-        } catch (Exception e) {
-            log.error("Error fetching rates from provider for symbol={}", baseSymbol);
-            throw new ProviderException("Failed to retrieve rates for currency: " + baseSymbol, e);
-        }
+        Map<String, BigDecimal> rawRates = cryptoProvider.getRatesForCurrency(baseSymbol, rates);
 
         if (rawRates == null || rawRates.isEmpty()) {
             log.error("No rates found for baseSymbol={}", baseSymbol);
-            throw new ProviderException("No rates found for currency: " + baseSymbol);
+            throw new ApiException("No rates found for currency: " + baseSymbol);
         }
 
         CurrencyRatesResponse response = new CurrencyRatesResponse();

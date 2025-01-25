@@ -1,5 +1,6 @@
 package com.crypto.currency.provider;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +9,7 @@ public interface CryptoProvider {
     /**
      * Returns a map of (quoteSymbol -> exchangeRate) for the given baseSymbol.
      */
-    Map<String, Double> getRatesForCurrency(String baseSymbol, List<String> rates);
+    Map<String, BigDecimal> getRatesForCurrency(String baseSymbol, List<String> rates);
 
 }
 
