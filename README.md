@@ -56,6 +56,11 @@ This application provides two main endpoints for retrieving cryptocurrency excha
  - Spring Boot may log any random generated security password (if default security is enabled).
  - For a different port or other overrides, see application.yaml or application.properties.
 
+5. **Open your browser and go to**:
+
+   http://localhost:8080/swagger-ui.html
+
+
 # Currency Exchange API
 
 This document describes the available endpoints, request/response formats, and error handling for the Currency Exchange API.
