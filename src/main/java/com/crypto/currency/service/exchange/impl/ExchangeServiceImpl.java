@@ -40,6 +40,7 @@ public class ExchangeServiceImpl implements ExchangeService {
         return response;
     }
 
+    //TODO: for more control over thread management and task scheduling possible use for ExecutorService
     private ExchangeResponse populateExchangeResponse(final ExchangeRequest request,
                                                       Map<String, BigDecimal> rateMap) {
 
