@@ -12,7 +12,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-//TODO: Create separate validator service
+//TODO: For provider strategy management create ProviderManager
+// for selection of api to be used based on some application property
 @RequiredArgsConstructor
 @Service
 @Slf4j
