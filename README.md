@@ -1,6 +1,6 @@
 # Crypto Exchange API
 
-This application provides two main endpoints for retrieving cryptocurrency exchange rates from CoinGecko and performing exchanges with a 1% fee. Below is comprehensive documentation in **Markdown** format.
+This application provides two main endpoints for retrieving cryptocurrency exchange rates from CoinGecko and performing exchanges with a fee.
 
 ---
 
